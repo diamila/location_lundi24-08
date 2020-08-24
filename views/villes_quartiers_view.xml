@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Ville form view -->
+
+		<record model="ir.ui.view" id="ville_form_view">
+            <field name="name">ville.form</field>
+            <field name="model">lb.ville</field>
+            <field name="arch" type="xml">
+                <form string="Ville Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="nom"/>
+                        </group>
+					</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Ville tree view -->
+
+        <record model="ir.ui.view" id="ville_tree_view">
+            <field name="name">ville.tree</field>
+            <field name="model">lb.ville</field>
+            <field name="arch" type="xml">
+                <tree string="Ville Tree">
+                    <field name="nom"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ville_list_action">
+            <field name="name">Villes</field>
+            <field name="res_model">lb.ville</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Entrez ici les villes dans lesquelles l'agence immobilière gère des biens
+                </p>
+            </field>
+        </record>
+
+
+        <!-- Quartier form view -->
+
+		<record model="ir.ui.view" id="quartier_form_view">
+            <field name="name">quartier.form</field>
+            <field name="model">lb.quartier</field>
+            <field name="arch" type="xml">
+                <form string="Quartier Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="nom_quartier"/>
+                            <field name="ville_associée"/>
+                        </group>
+					</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Quartier tree view -->
+
+        <record model="ir.ui.view" id="quartier_tree_view">
+            <field name="name">quartier.tree</field>
+            <field name="model">lb.quartier</field>
+            <field name="arch" type="xml">
+                <tree string="Quartier Tree">
+                    <field name="nom_quartier"/>
+                    <field name="ville_associée" string="Ville"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="quartier_list_action">
+            <field name="name">Quartiers</field>
+            <field name="res_model">lb.quartier</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Entrez ici les quartiers dans lesquelles l'agence immobilière gère des biens
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="villes_quartiers_menu" name="VILLES QUARTIERS"
+                  parent="rental_app_menu" sequence="1"/>
+
+        <menuitem id="ville_menu" name="Villes"
+                  parent="villes_quartiers_menu"
+                  action="ville_list_action" sequence="1"/>
+
+        <menuitem id="quartier_menu" name="Quartiers"
+                  parent="villes_quartiers_menu"
+                  action="quartier_list_action" sequence="2"/>
+
+    </data>
+</odoo>

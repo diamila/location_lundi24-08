@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+         <!-- ResPartner customization -->
+
+    <record id="locataire_custom_fields" model="ir.ui.view">
+      <field name="name">locataire.form.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+           <button name="%(crm.crm_lead_opportunities)d" position="before">
+              <button style="background-color:#00FFFF;border-radius: 7px" string="Create Contrat"
+             name="%(location_biens.open_create_contrat)d" type="action"  context="{'default_locataires': active_id}"/>
+           </button>
+
+          <button
+             name="%(location_biens.open_create_contrat)d" position="attributes">
+               <attribute name="attrs" >{'invisible':[('active_potenctiel','=',True)]}</attribute>
+           </button>
+
+        <xpath expr="//field[@name='vat']" position="after">
+          <field name="active_potenctiel"/>
+        </xpath>
+
+          <xpath expr="//field[@name='active_potenctiel']" position="after">
+          <field name="origine_prospect"/>
+        </xpath>
+
+
+         <xpath expr="//field[@name='origine_prospect']" position="attributes">
+               <attribute name="attrs">{'invisible':[('active_potenctiel','=',False)]}</attribute>
+          </xpath>
+
+            <xpath expr="//field[@name='origine_prospect']" position="after">
+          <field name="user_id"/>
+        </xpath>
+
+         <xpath expr="//field[@name='user_id']" position="attributes">
+               <attribute name="attrs">{'invisible':[('active_potenctiel','=',False)]}</attribute>
+          </xpath>
+
+           <xpath expr="//field[@name='user_id']" position="attributes">
+               <attribute name="attrs">{'invisible':[('origine_prospect','!=','agent_cpi')]}</attribute>
+          </xpath>
+
+
+
+          <xpath expr="//field[@name='opportunity_count']" position="attributes">
+               <attribute name="attrs" >{'invisible':[('active_potenctiel','=',False)]}</attribute>
+          </xpath>
+
+
+          <xpath expr="//field[@name='sale_order_count']" position="attributes">
+               <attribute name="string" >Factures</attribute>
+          </xpath>
+
+          <xpath expr="//page[@name='sales_purchases']" position="attributes">
+               <attribute name="string" >Location &amp; Achat</attribute>
+          </xpath>
+
+          <xpath expr="//group[@name='sale']" position="attributes">
+               <attribute name="string" >Location</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='opportunity_count']" position="attributes">
+               <attribute name="attrs" >{'invisible':[('active_potenctiel','=',False)]}</attribute>
+          </xpath>
+
+
+           <button name="%(crm.crm_lead_opportunities)d" position="attributes">
+               <attribute name="attrs" >{'invisible':[('active_potenctiel','=',False)]}</attribute>
+           </button>
+
+
+
+            <notebook position="inside">
+             <page string="Info locataire Potenciel" attrs="{'invisible':[('active_potenctiel','=',False)]}">
+             <group>
+                 <field name="quartier_souhaitee"></field>
+                 <field name="budget"></field>
+             </group>
+             </page>
+            </notebook>
+
+           <notebook position="inside">
+             <page string="Reclamation locataire" attrs="{'invisible':[('active_potenctiel','=',True)]}">
+             <field name="reclamation" attrs="{'invisible':[('active_potenctiel','=',True)]}">
+                                    <tree string="Réclamation locataire">
+                                        <field name="type_reclamation"/>
+                                        <field name="date_reclamation"/>
+                                         <field name="resume_reclamation"/>
+                                    </tree>
+                                </field>
+             </page>
+            </notebook>
+
+          <!--
+          <xpath expr="//page[@name='internal_notes']" position="after">
+             <page string="Potenciel">
+                        <field name="quartier_souhaitee" attrs="{'invisible': [(active_potenctiel','=',False)]}"/>
+                 <field name="type_id" attrs="{'invisible': [(active_potenctiel','=',True)]}"/>
+                 <field name="budget" widget="monetary" attrs="{'invisible': [(active_potenctiel','=',False)]}"/>
+
+			 </page>
+        </xpath>-->
+      </field>
+    </record>
+
+        <!-- Locataires tree view -->
+
+      <!--
+    <record id="locataire_custom_tree_fields" model="ir.ui.view">
+      <field name="name">locataire.tree.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='display_name']" position="before">
+                  <field name="quartier_souhaitee"/>
+                 <field name="type_id" attrs="{'invisible': [(active_potenctiel','=',True)]}"/>
+                 <field name="budget" widget="monetary"/>
+        </xpath>
+      </field>
+    </record>
+      -->
+
+
+
+
+
+        <!-- Locataires search view -->
+           <record id="locataire_custom_search_fields" model="ir.ui.view">
+      <field name="name">locataire.search.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='customer']" position="after">
+                     <filter string="Potenciel" name="budget" domain="[('active_potenctiel','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
+
+
+        <record model="ir.actions.act_window" id="locataire_potenciel_list_action">
+            <field name="name">Locataires potenciel</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+             <field name="domain">[('active_potenctiel','=',True)]</field>
+            <field name="search_view_id" ref="locataire_custom_search_fields"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau Locataire potenciel
+                </p>
+            </field>
+        </record>
+
+
+
+        <menuitem id="locataire_potencie_menu" name="Prospect"
+                  parent="locataire_menu"
+                  action="locataire_potenciel_list_action" sequence="2"/>
+
+
+      <menuitem id="locatairepotenciel" name="Prospect"
+                  parent="crm.crm_menu_root"
+                  action="locataire_potenciel_list_action" sequence="6"/>
+
+
+
+      <!-- Réclamation form view -->
+
+        <record model="ir.ui.view" id="reclamationform_view">
+            <field name="name">reclamation.form</field>
+            <field name="model">lb.reclamation</field>
+            <field name="arch" type="xml">
+                <form string="Réclamation Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="type_reclamation"/>
+                            <field name="resume_reclamation"/>
+                        </group>
+                         <group>
+                            <field name="date_reclamation"/>
+                            <field name="fichier"/>
+                        </group>
+					</group>
+                      <field name="notes" placeholder="Log a note..."/>
+                    <footer>
+                        <button string="Planifier" name="action_close_dialog" type="object" class="btn-primary"/>
+                        <button  string="Marque comme Terminé" name="action_done" type="object" class="btn-secondary"/>
+                    </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+       <record model="ir.actions.act_window" id="reclamation_action_view">
+            <field name="name">reclamation.action</field>
+           <field name="res_model">lb.reclamation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

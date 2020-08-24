@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Create PDF Report-->
+    <!--  https://www.youtube.com/watch?v=SkKAXURqNfQ&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=24  -->
+    <!--  https://www.youtube.com/watch?v=qAv5GAmIryI&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=25   -->
+    <template id="report_close">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div class="oe_structure"/>
+                        <div class="row">
+                            <div class="col-xs-2" style="margin:auto;">
+                            </div>
+                            <center>
+                                <div>
+                                    <table>
+                                        <h1 style="color:red">CONTRAT ClOSE</h1>
+                                        <h4>ref:contrat :<div t-field="o.contrat_id"></div></h4>
+                                         <br/>
+                                         <br/>
+
+                                         <h2>CONTRAT DE LOCATION POUR UN <div t-field="o.categ_id"></div> </h2>
+                                         <br/>
+
+                                             <p style="text-align:center;">
+                                                 <h3><strong><span t-field="o.bien_loue"/></strong></h3>
+                                             </p>
+
+                                        <!--1er ligne-->
+                                        <tr width="80%">
+                                            <!--1er colonne-->
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Locataire: </strong></p>
+                                                            <p style="text-align:right;"><strong>Le n° Tel du Locataire: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"  t-field="o.locataires"/>
+                                                            <p style="text-align:left;padding-left:10px;" t-field="o.mobile"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                             <p style="text-align:right;"><strong>Demeurant à :</strong></p>
+                                                            <p style="text-align:right;"><strong>CIN ou passeport n° :</strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;" t-field="o.adresse_locataire"/>
+                                                            <p style="text-align:left;padding-left:10px;" t-field="o.cin_ou_passeport"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+
+                                         <!--2EME LIGNE-->
+                                        <tr>
+                                            <!--1er colonne-->
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                        <td>
+                                                              <p style="text-align:right;"><strong>Bailleur: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                             <p style="text-align:left;padding-left:10px;"  t-field="o.bailleur"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Date Quittance: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"  t-field="o.date_quittancement"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <!--3EME LIGNE-->
+                                        <tr>
+                                            <!--1er colonne-->
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Montant Loyer: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"  t-field="o.loyer_sans_charges"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Paiement: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                             <p style="text-align:left;padding-left:10px;"  t-field="o.paiement"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <!--2EME LIGNE-->
+                                        <tr>
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Caution Déposée: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"  t-field="o.caution"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Caution Retounée: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                             <p style="text-align:left;padding-left:10px;" t-field="o.caution_returne"/>
+                                                        </td>
+
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+
+                                          <!--4EME LIGNE-->
+                                        <tr>
+                                            <!--1er colonne-->
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                       <td>
+                                                            <p style="text-align:right;"><strong>Date caution Retourné: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                             <p style="text-align:left;padding-left:10px;"  t-field="o.date_returne"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                         <td>
+                                                            <p style="text-align:right;"><strong>maintenance: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;" t-field="o.maintenance"/>
+                                                        </td>
+
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+
+
+                                         <!--4EME LIGNE-->
+                                        <tr>
+                                            <!--1er colonne-->
+                                            <td width="50%">
+                                                  <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>Date debut: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                            <p style="text-align:left;padding-left:10px;"  t-field="o.date_debut"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                             <!--2em colonne-->
+                                            <td width="50%">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+                                                            <p style="text-align:right;"><strong>date_expiration: </strong></p>
+                                                        </td>
+                                                        <td>
+                                                             <p style="text-align:left;padding-left:10px;"  t-field="o.date_expiration"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br></br>
+                                    <br></br>
+                                    <p> Les locaux présentement loués doivent être utilisés exclusivement à usage <p style="color:#5338B6" t-field="o.utilisation"/>.<br/>
+                                        Le présent bail se renouvellera par tacite reconduction, pour une durée équivalente, à chaque date anniversaire,
+                                        faute de préavis contraire donné par l’une des parties à l’autre sous forme de lettre re
+                                        commandée deux mois avant l’expiration de la période en cours <br/>
+                                        Un état des lieux ainsi qu’un inventaire du mobilier, des ustensiles et appareils seront faits lors de l’entrée en
+                                        jouissance et feront l’objet d’un document annexé qui devra être signé par les deux parties.</p>
+
+                                </div>
+
+                            </center>
+                            <!--adding the barcode to the report-->
+                            <!--  https://www.youtube.com/watch?v=bwT_ZtKWn9E&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=51  -->
+                            <!--<table class="table table-bordered mb-0" style="border: 2px solid black;">-->
+                                <!--<tr>-->
+                                    <!--<td class="text-center align-middle" style="height: 6rem">-->
+                                        <!--<img alt="Barcode" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', o.name_seq, 600, 150)" style="width:100%;height::4rem;"/>-->
+                                        <!--<span t-field="o.name_seq"/>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                            <!--</table>-->
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
+

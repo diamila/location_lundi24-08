@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Etat des lieux form view -->
+
+		<record model="ir.ui.view" id="etat_des_lieux_form_view">
+            <field name="name">etatdeslieux.form</field>
+            <field name="model">lb.etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <form string="Etat des lieux Form">
+                    <sheet>
+                    <div class="oe_button_box" name="button_box" groups="base.group_user">
+                        <button class="oe_stat_button" name="attachment_tree_view" type="object" icon="fa-files-o" attrs="{'invisible': [('etat_des_lieux_type','=', 'pendant')]}">
+                            <field string="Images" name="doc_count" widget="statinfo" attrs="{'invisible': [('etat_des_lieux_type','=', 'pendant')]}"/>
+                        </button>
+					</div>
+                    <group>
+                        <group>
+                            <field name="etat_des_lieux_type"/>
+                            <field name="date_etat_des_lieux" attrs="{'invisible': [('etat_des_lieux_type','=', 'pendant')]}"/>
+                            <field name="ref_etat_des_lieux"/>
+                            <field name="location"/>
+                            <field name="etat_des_lieux_entree_associe" attrs="{'invisible': [('etat_des_lieux_type', '=', 'entree')]}"/>
+                        </group>
+                        <group string="Produit">
+                            <field name="categ_id"></field>
+                            <field name="bien_loue"></field>
+                            <field name="adresse"></field>
+                        </group>
+                    </group>
+                        <group>
+                            <group string="locataire">
+                               <field name="locataires"/>
+                                <field name="mobile"/>
+                            </group>
+                            <group string="Agent">
+                               <field name="notes" placeholder="note interne..."/>
+                                <field name="user_id"></field>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Etat des lieux" attrs="{'invisible': [('etat_des_lieux_type','=', 'pendant')]}">
+                                <field name="enregistrement_etat_des_lieux" attrs="{'invisible': [('etat_des_lieux_type','=', 'pendant')]}">
+                                    <tree string="Etat des lieux">
+                                        <field name="nom_piece"/>
+                                        <field name="Etat"/>
+                                    </tree>
+                                </field>
+							</page>
+                        </notebook>
+
+                        <notebook>
+                             <page string="Fiche de visite Mensuel" attrs="{'invisible': [('etat_des_lieux_type','!=', 'pendant')]}">
+                                <field name="pendant_etat_des_lieux" attrs="{'invisible': [('etat_des_lieux_type','!=', 'pendant')]}">
+                                    <tree string="fiche de visite Mensuel">
+                                        <field name="nom_piece_pendant"/>
+                                        <field name="Etat_pendant"/>
+                                         <field name="date_pendant"/>
+                                         <field name="photos"/>
+                                    </tree>
+                                </field>
+							</page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Etat des lieux tree view -->
+
+        <record model="ir.ui.view" id="etat_des_lieux_tree_view">
+            <field name="name">etatdeslieux.tree</field>
+            <field name="model">lb.etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <tree string="Etat des lieux Tree" decoration-success="etat_des_lieux_type=='pendant'"  decoration-danger="etat_des_lieux_type=='sortie'">
+                    <field name="etat_des_lieux_type"/>
+                    <field name="location"/>
+                    <field name="categ_id"></field>
+                    <field name="bien_loue"></field>
+                    <field name="adresse"></field>
+                    <field name="Etat" domain="[('etat_des_lieux_type','!=', 'pendant')]"/>
+                     <field name="date_etat_des_lieux" domain="[('etat_des_lieux_type','!=', 'pendant')]"/>
+
+                    <field name="Etat_pendant" domain="[('etat_des_lieux_type','=', 'pendant')]"/>
+                    <field name="date_pendant" domain="[('etat_des_lieux_type','=', 'pendant')]"></field>
+                </tree>
+            </field>
+        </record>
+
+
+         <record model="ir.ui.view" id="view_etat_lieu_kanban">
+            <field name="name">lb.etat_des_lieuxkanban</field>
+            <field name="model">lb.etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div
+                                    t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div class="oe_dropdown_kanban">
+                                    <!-- dropdown menu -->
+                                    <div class="oe_dropdown_toggle">
+                                        <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
+                                        <ul class="oe_dropdown_menu">
+                                            <li>
+                                                <a type="delete">Delete</a>
+                                            </li>
+                                            <li>
+                                                <ul class="oe_kanban_colorpicker"
+                                                    data-field="color"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="oe_clear"></div>
+                                </div>
+                                <div t-attf-class="oe_kanban_content">
+                                   <ul>
+                                       <li>Type Etat :<field name="etat_des_lieux_type" /></li>
+                                       <li>Type Bien : <field name="categ_id"></field></li>
+                                       <li>Bien loué : <field name="bien_loue"></field></li>
+                                       <li>Quartier de visite : <field name="adresse"></field></li>
+                                       <br/>
+                                       <li>Etat Lieu :<field name="Etat"/></li>
+                                       <li>Date Etat_Lieu :<field name="date_etat_des_lieux"/></li>
+                                         <br/>
+                                       <li>Etat Visite :<field name="Etat_pendant" style="color:#00FF00"/></li>
+                                       <li>Date Visite :<field name="date_pendant" style="color:#00FF00"></field></li>
+                                </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Etat des lieux search view -->
+        <record id="view_etat_des_lieux_filter" model="ir.ui.view">
+            <field name="name">Rechercher Etat des lieux</field>
+            <field name="model">lb.etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Etat des lieux">
+                    <field name="etat_des_lieux_type"/>
+                    <field name="date_etat_des_lieux"/>
+                    <field name="location"/>
+                    <field name="ref_etat_des_lieux"/>
+                      <group expand="0" string="CONTRAT">
+                        <filter string="Contrat associé" name="location" context="{'group_by':'location'}"/>
+                      </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="etat_des_lieux_list_action">
+            <field name="name">Etat des lieux</field>
+            <field name="res_model">lb.etat_des_lieux</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_etat_des_lieux_filter"/>
+             <field name="context">{'group_by':'location'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouvel état des lieux
+                </p>
+            </field>
+        </record>
+
+        <!-- Enregistrement Etat des lieux form view -->
+
+        <record model="ir.ui.view" id="enregistrement_etat_des_lieux_form_view">
+            <field name="name">enregistrement_etat_des_lieux.form</field>
+            <field name="model">lb.enregistrement_etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <form string="Enregistrement Etat des lieux Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="nom_piece"/>
+                            <field name="Etat"/>
+                            <field name="commentaires"/>
+                        </group>
+					</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="garant_list_action">
+            <field name="name">Enregistrement Etat des lieux</field>
+            <field name="res_model">lb.enregistrement_etat_des_lieux</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+         <!-- Enregistrement fiche visite pendant location x form view -->
+
+        <record model="ir.ui.view" id="pendant_etat_des_lieux_form_view">
+            <field name="name">pendant_etat_des_lieux.form</field>
+            <field name="model">lb.pendant_etat_des_lieux</field>
+            <field name="arch" type="xml">
+                <form string="Fiche de visite Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="nom_piece_pendant"/>
+                            <field name="Etat_pendant"/>
+                            <field name="commentaires_pendant"/>
+                            <field name="date_pendant"/>
+                            <field name="photos" widget="image"/>
+                            <field name="fichier"/>
+                        </group>
+					</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="garant_list_action">
+            <field name="name">Enregistrement Etat des lieux</field>
+            <field name="res_model">lb.enregistrement_etat_des_lieux</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="etat_menu" name="ETAT DES LIEUX"
+                  parent="rental_app_menu" sequence="7"/>
+
+        <menuitem id="etat_des_lieux_menu" name="Etat des lieux"
+                  parent="etat_menu"
+                  action="etat_des_lieux_list_action" sequence="1"/>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Bailleur form view -->
+
+		<record model="ir.ui.view" id="bailleur_form_view">
+            <field name="name">bailleur.form</field>
+            <field name="model">lb.bailleur</field>
+            <field name="arch" type="xml">
+                <form string="Bailleur Form">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                          <button name="open_bailleur_bien" class="oe_stat_button" type="object">
+                            <field string="Biens" name="bien_count" widget="statinfo"/>
+                          </button>
+                        </div>
+                     <field name="image" widget="image" class="oe_avatar"/>
+                     <div class="oe_title">
+                        <h1>
+                             <field name="nom" default_focus="1" placeholder="Nom Bailleur"/>
+                        </h1>
+                    </div>
+                        <br></br>
+                        <br></br>
+                    <group>
+                        <group>
+                                <field name="street" placeholder="Adresse..." class="o_address_street"/>
+                                <field name="street2" placeholder="Adresse2..." class="o_address_street"/>
+                                <field name="code_postale" placeholder="Code Postale"/><br></br>
+                                <field name="ville" placeholder="Ville" class="o_address_city"/><br></br>
+                                <field name="pays_id" placeholder="Pays" class="o_address_country"/>
+                        </group>
+                        <group>
+                             <field name="poste_occupe"/>
+                            <field name="email" widget="email"/>
+                            <field name="telephone" widget="phone"/>
+                            <field name="mobile"/>
+                            <field name="website" widget="url" placeholder="Ex. : www.odoo.com" modifiers="{}"/>
+                             <field name="civilite" options="{&quot;no_open&quot;: True}"/>
+                        </group>
+                    </group>
+                        <notebook>
+                           <page string="CONTACT">
+                            <group>
+                              <field name="enregistrement_contact"/>
+                            </group>
+                          </page>
+                          <page string="CIN / Passeport">
+                            <group>
+                              <field name="type_piece_identite"/>
+                              <field name="num_piece_identite"/>
+                            </group>
+                          </page>
+                         </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Bailleur tree view -->
+
+        <record model="ir.ui.view" id="bailleurs_tree_view">
+            <field name="name">bailleur.tree</field>
+            <field name="model">lb.bailleur</field>
+            <field name="arch" type="xml">
+                <tree string="Bailleur Tree">
+                    <field name="nom"/>
+                    <field name="email"/>
+                    <field name="telephone"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Bailleur search view -->
+        <record id="view_bailleur_filter" model="ir.ui.view">
+            <field name="name">Rechercher bailleur</field>
+            <field name="model">lb.bailleur</field>
+            <field name="arch" type="xml">
+                <search string="Rechercher Bailleur">
+                    <field name="nom"/>
+                    <field name="email"/>
+                    <field name="telephone"/>
+                </search>
+            </field>
+        </record>
+
+          <!--vue kanban-->
+           <record id="bailleur_kanban" model="ir.ui.view">
+        <field name="name">lb.bailleur.kanban</field>
+        <field name="model">lb.bailleur</field>
+        <field name="arch" type="xml">
+             <kanban >
+                <field name="id"/>
+                <field name="image"/>
+                <field name="nom"/>
+                <field name="email"/>
+                  <field name="street"/>
+                 <field name="mobile"/>
+             <templates>
+                    <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                              <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('lb.bailleur', 'image', record.id.raw_value)" alt="Bailleur"/>
+                              </div>
+                              <div t-attf-class="oe_kanban_content">
+                                   <ul>
+                                    <li>Nom : <field name="nom"/></li>
+                                    <li>Email du Bailleur: <field name="email"/></li>
+                                    <li>Adresse: <field name="street"/></li>
+                                    <li>N° Tel : <field name="mobile"/></li>
+                                </ul>
+                              </div>
+                            </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+
+        <record model="ir.actions.act_window" id="bailleur_list_action">
+            <field name="name">Bailleurs</field>
+            <field name="res_model">lb.bailleur</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_bailleur_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau bailleur
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="bailleur_menu" name="PROPRIETAIRES"
+                  parent="rental_app_menu" sequence="5"/>
+
+        <menuitem id="bailleur_menu_menu" name="Bailleurs"
+                  parent="bailleur_menu"
+                  action="bailleur_list_action" sequence="1"/>
+
+
+    </data>
+</odoo>

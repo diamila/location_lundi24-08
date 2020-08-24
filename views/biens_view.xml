@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+              <!--menu PRINCIPALE-->
+        <menuitem id="main_rental_app_menu" name="Location des Biens" web_icon="location_biens,static/description/icon.jpeg"/>
+        <menuitem id="rental_app_menu" name="Location des Biens"
+                  parent="main_rental_app_menu"/>
+        <menuitem id="bien_menu" name="PRODUITS"
+                  parent="rental_app_menu" sequence="3"/>
+
+
+
+
+        <!--ARTICLE-->
+         <record id="product_template_inherit" model="ir.ui.view">
+      <field name="name">product.template.inherit</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"/>
+      <field name="arch" type="xml">
+          <button name="toggle_active" position="after">
+              <button name="tt_locate_bien" widget="map" string="obtenir l'emplacement" type="object" sstyle="background-color:##87CEFA;border-radius: 3px" class="fa fa-map-marker"/>
+          </button>
+          <button name="tt_locate_bien" position="after">
+           <button name="open_bien_contrat" class="oe_stat_button" type="object" icon="fas fa-file-contract">
+                            <field string="Contrats" name="contrat_count" widget="statinfo"/>
+                        </button>
+          </button>
+           <button name="open_bien_contrat" position="after">
+           <button name="open_bien_maintenance" class="oe_stat_button" type="object">
+                            <field string="Maintenance" name="maintenance_count" widget="statinfo"/>
+                        </button>
+          </button>
+
+          <button name="open_bien_maintenance" position="after">
+           <button style="border-radius: 3px" class="btn btn-default">
+          <div><field name="etat" style="font-size:17px;color:#B63845;"/></div>
+           </button>
+              </button>
+
+         <!--
+          <field name="type" position="attributes">
+               <attribute name="invisible">1</attribute>
+          </field>
+          -->
+          <field name="invoice_policy" position="attributes">
+               <attribute name="invisible">1</attribute>
+           </field>
+          <!--
+           <field name="standard_price" position="attributes">
+               <attribute name="invisible">1</attribute>
+          </field>
+          -->
+
+
+
+
+          <xpath expr="//span[@class='o_stat_text']" position="replace">
+              <span class="o_stat">Facture</span>
+          </xpath>
+
+
+          <xpath expr="//label[@for='sale_ok']" position="replace">
+               <label for="sale_ok"  string="Peut étre en location"/>
+           </xpath>
+
+
+
+           <xpath expr="//field[@name='categ_id']" position="attributes">
+               <attribute name="string" >Catégorie du Bien</attribute>
+          </xpath>
+
+
+           <xpath expr="//field[@name='type']" position="attributes">
+               <attribute name="string" >Type</attribute>
+          </xpath>
+
+          <!--
+
+
+           <xpath expr="//label[@for='sale_ok']" position="attributes">
+               <attribute name="invisible">1</attribute>
+           </xpath>
+
+           <xpath expr="//div[@for='sale_ok']" position="attributes">
+               <attribute name="invisible">1</attribute>
+           </xpath>
+
+
+
+          <xpath expr="//field[@name='sale_ok']" position="attributes">
+               <attribute name="string" >Peut étre en location</attribute>
+          </xpath>-->
+
+          <xpath expr="//field[@name='list_price']" position="attributes">
+               <attribute name="string" >Prix Location</attribute>
+                </xpath>
+
+          <xpath expr="//page[@name='sales']" position="attributes">
+               <attribute name="string" >Location</attribute>
+          </xpath>
+
+
+          <xpath expr="//page[@name='general_information']" position="after">
+              <page string="info supémentaire">
+                  <group>
+                      <group>
+                       <field name="bailleur_id" string="bailleur"></field>
+                       <field name="Date"/>
+                       <field name="nbre_tour"/>
+                       <field name="ameublement"/>
+                          <field name="gestionnaire_id"/>
+                           <field name="oriente_vers"/>
+                      </group>
+
+                       <group>
+                         <field name="latitude" string="latitude"/>
+                         <field name="longitude" string="longitude"/>
+                         <field name="adresse"/>
+                        <field name="ville"  class="o_address_city"/>
+                       <field name="pays" placeholder="Pays" class="o_address_country"/>
+                      </group>
+                   </group>
+
+                  <group>
+                    <group>
+                        <field name="salles_bain"/>
+                        <field name="parking"/>
+                        <field name="balcon"/>
+                    </group>
+
+                    <group>
+                         <field name="jardin" />
+                         <field name="ascenseur"/>
+                         <field name="g_electroge"/>
+                    </group>
+                </group>
+              </page>
+              <page string="Piéces">
+                  <page string="Piéces">
+                 <page string="Piéces">
+                      <group>
+     	                <group>
+                             <field name="chambres"></field>
+                            <field name="salons"></field>
+     	                    <field name="cour"></field>
+     	                </group>
+     	               <group>
+     	                    <field name="cuisines"></field>
+                            <field name="toilette"></field>
+                       </group>
+                      </group>
+                     <group><field name="sous_propriete_ids"/> </group>
+                 </page>
+              </page>
+              </page>
+               <page string="Lieu Plus Proche">
+                  <group>
+                      <field name="plus_proche_ids"/>
+                  </group>
+              </page>
+              <page string="Plans, Photos et Documents">
+                  <page string="Plans d'étage"><group><field name="plan_ids"></field></group></page>
+                  <page string="Photos"><group><field name="photos_ids"></field></group></page>
+                  <page string="Documents"><group><field name="documents_ids"></field></group></page>
+              </page>
+          </xpath>
+      </field>
+    </record>
+
+
+       <!--tree/bien heritage-->
+        <record id="product_template_tree_view" model="ir.ui.view">
+            <field name="name">product.template.tree</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="type_id"/>
+                </xpath>
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <field name="adresse"/>
+                </xpath>
+                <xpath expr="//field[@name='type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+         <!--kanban/bien heritage-->
+        <record id="product_kanban_view" model="ir.ui.view">
+            <field name="name">product.template.kanban</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='tags']" position="after">
+                    <div name="type">
+                                <ul>
+                                    <li>Type Bien: <field name="type_id"/></li>
+                                </ul>
+                    </div>
+                </xpath>
+                <xpath expr="//div[@name='type']" position="after">
+                    <div name="addresse">
+                                <ul>
+                                    <li> adresse : <field name="adresse"/></li>
+                                </ul>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+         <!-- bien search view -->
+           <record id="bien_custom_search_fields" model="ir.ui.view">
+      <field name="name">bien.search.inherited</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='activities_upcoming_all']" position="after">
+                     <group expand="0" name="group_by" string="Group By">
+                       <filter name="group_company" string="Type Biens" context="{'group_by': 'categ_id'}"/>
+                     </group>
+                </xpath>
+            </field>
+        </record>
+
+
+
+               <!--action bien-->
+        <record model="ir.actions.act_window" id="article_list_action">
+            <field name="name">Biens</field>
+            <field name="res_model">product.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'group_by': 'categ_id'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Biens
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="articless_menu" name="Biens"
+                  parent="bien_menu"
+                  action="article_list_action" sequence="1"/>
+
+      <!--________________________________________________________________________________________________________________-->
+        <!-- Type_Bien form view -->
+
+        <record model="ir.ui.view" id="type_form_view">
+            <field name="name">type.form</field>
+            <field name="model">lb.type</field>
+            <field name="arch" type="xml">
+                <form string="Type Form">
+                    <sheet>
+                        <group>
+                            <field name="type"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="type_tree_view">
+            <field name="name">type.tree</field>
+            <field name="model">lb.type</field>
+            <field name="arch" type="xml">
+                <tree string="Type Tree">
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="type_list_action">
+            <field name="name">Types des Biens</field>
+            <field name="res_model">lb.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau Type
+                </p>
+            </field>
+        </record>
+
+
+
+         <!-- gestionnaire form view -->
+
+        <record model="ir.ui.view" id="gestionnaire_form_view">
+            <field name="name">type.form</field>
+            <field name="model">lb.gestionnaire</field>
+            <field name="arch" type="xml">
+                <form string="Type Form">
+                    <sheet>
+                        <group>
+                            <field name="gestionnaire_immeuble"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="gestionnaire_tree_view">
+            <field name="name">type.tree</field>
+            <field name="model">lb.gestionnaire</field>
+            <field name="arch" type="xml">
+                <tree string="Type Tree">
+                    <field name="gestionnaire_immeuble"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="gestionnaire_list_action">
+            <field name="name">Types des Biens</field>
+            <field name="res_model">lb.gestionnaire</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau gestionnaire immeuble
+                </p>
+            </field>
+        </record>
+
+
+
+        <!-- lb.histor form view -->
+
+        <record model="ir.ui.view" id="history_form_view">
+            <field name="name">type.form</field>
+            <field name="model">lb.history</field>
+            <field name="arch" type="xml">
+                <form string="history Form">
+                    <sheet>
+                        <group>
+                            <field name="date"/>
+                            <field name="source"/>
+                            <field name="number"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+         <record model="ir.ui.view" id="history_tree_view">
+            <field name="name">history.tree</field>
+            <field name="model">lb.history</field>
+            <field name="arch" type="xml">
+                <tree string="history Tree">
+                     <field name="source"/>
+                    <field name="number"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="history_list_action">
+            <field name="name">history bien</field>
+            <field name="res_model">lb.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau history
+                </p>
+            </field>
+        </record>
+
+
+        <!--lieu plus proche-->
+
+        <record model="ir.ui.view" id="lieu_form_view">
+            <field name="name">type.form</field>
+            <field name="model">lb.lieu</field>
+            <field name="arch" type="xml">
+                <form string="lieu plus proche Form">
+                    <sheet>
+                        <group>
+                            <field name="name_lieu"/>
+                            <field name="type_lieu"/>
+                            <field name="distance"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+          <record model="ir.ui.view" id="lieu_tree_view">
+            <field name="name">lieu.tree</field>
+            <field name="model">lb.lieu</field>
+            <field name="arch" type="xml">
+                <tree string="lieu plus proche Tree">
+                     <field name="name_lieu"/>
+                    <field name="type_lieu"/>
+                    <field name="distance"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="plus_proche_list_action">
+            <field name="name">history bien</field>
+            <field name="res_model">lb.lieu</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    ajouté le lieu le plus proche
+                </p>
+            </field>
+        </record>
+
+        <!--sous_propriété-->
+        <record model="ir.ui.view" id="type_form_view">
+            <field name="name">type.form</field>
+            <field name="model">lb.sous_propriete</field>
+            <field name="arch" type="xml">
+                <form string="détail piéces">
+                    <sheet>
+                        <group>
+                             <field name="type_chambre"/>
+                             <field name="height"/>
+                             <field name="width"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="composant_tree_view">
+            <field name="name">composant.tree</field>
+            <field name="model">lb.sous_propriete</field>
+            <field name="arch" type="xml">
+                <tree string="piéce Tree">
+                    <field name="type_chambre"/>
+                    <field name="height"/>
+                    <field name="width"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="sous_propriete_list_action">
+            <field name="name">sous_propriete bien</field>
+            <field name="res_model">lb.sous_propriete</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau sous_propriete bien
+                </p>
+            </field>
+        </record>
+
+        <!--Plans d'étage, photos et documents-->
+         <!--form plan d'étage-->
+        <record model="ir.ui.view" id="plan_form_view">
+            <field name="name">lb.plan_etage.form</field>
+            <field name="model">lb.plan_etage</field>
+            <field name="arch" type="xml">
+                <form string=" Plan Etage">
+                    <sheet>
+                        <group>
+                            <field name="description_plan"/>
+                            <field name="photos_plan"  widget="image"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="plan_tree_view">
+            <field name="name">lb.plan_etage.tree</field>
+            <field name="model">lb.plan_etage</field>
+            <field name="arch" type="xml">
+                <tree string="PLan Etage liste">
+                    <field name="description_plan"/>
+                    <field name="photos_plan"/>
+                </tree>
+            </field>
+        </record>
+
+          <!--photos-->
+        <record model="ir.ui.view" id="photo_form_view">
+            <field name="name">lb.photos.form</field>
+            <field name="model">lb.photos</field>
+            <field name="arch" type="xml">
+                <form string="Photos du bien">
+                    <sheet>
+                        <group>
+                             <field name="description"/>
+                             <field name="photos"  widget="image"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="photos_tree_view">
+            <field name="name">lb.photos.tree</field>
+            <field name="model">lb.photos</field>
+            <field name="arch" type="xml">
+                <tree string="photos">
+                    <field name="description"/>
+                    <field name="photos"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--document-->
+        <record model="ir.ui.view" id="document_form_view">
+            <field name="name">lb.documents.form</field>
+            <field name="model">lb.documents</field>
+            <field name="arch" type="xml">
+                <form string="Documents du bien">
+                    <sheet>
+                        <group>
+                             <field name="description"/>
+                             <field name="date_expiration"/>
+                            <field name="fichier"></field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="document_tree_view">
+            <field name="name">lb.documents.tree</field>
+            <field name="model">lb.documents</field>
+            <field name="arch" type="xml">
+                <tree string="documents">
+                    <field name="description"/>
+                    <field name="date_expiration"/>
+                    <field name="fichier"></field>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+        <!--SOUS menu-->
+
+
+
+         <menuitem id="type" name="Types des Biens"
+                  parent="bien_menu"
+                  action="type_list_action" sequence="2"/>
+
+          <menuitem id="gestionnaire" name="gestionnaire immeuble"
+                  parent="bien_menu"
+                  action="gestionnaire_list_action" sequence="3"/>
+
+
+        <!--Menu informations-->
+         <menuitem id="information_menu" name="INFORMATIONS SUR LES BIENS"
+                  parent="rental_app_menu" sequence="2"/>
+
+         <!--sous menu pr history-->
+        <menuitem id="bien_bien_menu" name="history"
+                  parent="information_menu"
+                  action="history_list_action" sequence="1"/>
+
+         <!--sous menu lien plus proche -->
+        <menuitem id="lieu_menu" name="lien plus proche"
+                  parent="information_menu"
+                  action="plus_proche_list_action" sequence="2"/>
+
+
+          <menuitem id="sous_propriete" name="sous_propriété/composant"
+                  parent="information_menu"
+                  action="sous_propriete_list_action" sequence="3"/>
+
+
+
+
+  <!--Maintenance-->
+
+    <record id="'maintenance_request_custom_fields" model="ir.ui.view">
+      <field name="name">maintenance.request.form.inherited</field>
+      <field name="model">maintenance.request</field>
+      <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='company_id']" position="before">
+          <field name="cout_maintenance"/>
+        </xpath>
+          <xpath expr="//field[@name='cout_maintenance']" position="after">
+          <field name="bien_loue" string="Bien A Réparer"/>
+        </xpath>
+      </field>
+    </record>
+
+         <!--Maintenance tree-->
+
+    <record id="'maintenance_tree" model="ir.ui.view">
+      <field name="name">maintenance.tree.inherited</field>
+      <field name="model">maintenance.request</field>
+      <field name="inherit_id" ref="maintenance.hr_equipment_request_view_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="after">
+          <field name="cout_maintenance"  sum="Total" widget="monetary"/>
+        </xpath>
+          <xpath expr="//field[@name='cout_maintenance']" position="before">
+          <field name="bien_loue" string="Bien A Réparer"/>
+        </xpath>
+      </field>
+    </record>
+
+
+
+
+       <!--CRM-->
+    <record id="crm_lead_form" model="ir.ui.view">
+      <field name="name">crm.lead.form</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+      <field name="arch" type="xml">
+          <header position="inside"><button name="locataire" type="object" string="Vu Locataires" style="background-color:#90EE90"/></header>
+
+        <xpath expr="//field[@name='phone']" position="after">
+          <field name="type_propect"/>
+        </xpath>
+
+          <xpath expr="//field[@name='name']"  position="attributes">
+               <attribute name="placeholder" >EX:Besoin typeBien adresseSouhaiter</attribute>
+          </xpath>
+
+           <xpath expr="//field[@name='partner_id']" position="attributes">
+             <attribute name="domain" >[('active_potenctiel','=',True), ('customer','=',True), ('parent_id', '=', False)]</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='partner_id']" position="attributes">
+             <attribute name="options" >{'no_create': True}</attribute>
+          </xpath>
+         <!--
+          <xpath expr="//field[@name='partner_id']" position="after">
+             <field name="active_potenctiels"></field>
+          </xpath>
+
+         <xpath expr="//field[@name='active_potenctiels']" position="attributes">
+              <attribute name="editables"/>
+          </xpath>
+
+          <xpath expr="//field[@name='active_potenctiels']" position="attributes">
+               <attribute name="attrs">{'readonly':[('active_potenctiels', '=', True)]}</attribute>
+          </xpath>
+
+
+
+
+
+          <xpath expr="//field[@name='active_potenctiels']" position="attributes">
+               <attribute name="attrs">{'invisible': ['|', ('active','=',False), ('probability', '!=', 100)]}</attribute>
+          </xpath>
+
+
+
+      -->
+
+
+
+          <button name="action_schedule_meeting" position="before">
+              <button style="background-color:#00FFFF;border-radius: 10px" name="terminer_basculer" type="object" string="add comme un locataire"/>
+          </button>
+
+
+
+          <button name="terminer_basculer" position="attributes">
+             <attribute name="attrs">{'invisible': ['|', ('active','=',False), ('probability', '!=', 100)]}</attribute>
+
+               </button>
+
+
+
+          <button name="locataire" position="attributes">
+             <attribute name="attrs">{'invisible': ['|', ('active','=',False), ('probability', '!=', 100)]}</attribute>
+               </button>
+
+
+
+      </field>
+    </record>
+
+
+
+
+
+           <!--CRM raccourch-->
+    <record id="crm_lead_form_create" model="ir.ui.view">
+      <field name="name">crm.lead.form.create</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position="after">
+          <field name="type_propect"/>
+        </xpath>
+
+          <xpath expr="//field[@name='name']"  position="attributes">
+               <attribute name="placeholder" >EX:Besoin typeBien adresseSouhaiter</attribute>
+          </xpath>
+
+           <xpath expr="//field[@name='partner_id']" position="attributes">
+             <attribute name="domain" >[('active_potenctiel','=',True), ('customer','=',True), ('parent_id', '=', False)]</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='partner_id']" position="attributes">
+             <attribute name="options" >{'no_create': True}</attribute>
+          </xpath>
+
+
+      </field>
+    </record>
+
+
+
+
+       <!--kanban/crm heritage-->
+        <record id="crm_lead_kanban" model="ir.ui.view">
+      <field name="name">crm.lead.kanban</field>
+      <field name="model">crm.lead</field>
+      <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_kanban_content']" position="inside">
+                     <div>
+                         <ul>
+                             <li>type de prospect : <field name="type_propect"/></li></ul>
+                     </div>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

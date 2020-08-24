@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+
+         <!-- ResPartner customization -->
+
+    <record id="locataire_custom_fields" model="ir.ui.view">
+      <field name="name">locataire.form.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+          <button name="toggle_active" position="after">
+           <button name="open_locataire_contrat" class="oe_stat_button" type="object" icon="fas fa-file-contract">
+                            <field string="Contrats" name="contrat_count" widget="statinfo"/>
+                        </button>
+          </button>
+        <xpath expr="//field[@name='email']" position="replace">
+          <field name="email" string="E-mail"/>
+        </xpath>
+        <xpath expr="//field[@name='city']" position="replace">
+          <field name="city" placeholder="Ville"/>
+        </xpath>
+        <xpath expr="//field[@name='vat']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='category_id']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='state_id']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='zip']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//page[1]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+
+
+
+
+        <xpath expr="//page[@name='internal_notes']" position="before">
+             <page string="Contact">
+                <field name="enregistrement_contact">
+                    <tree string="Créer un Contact" editable="bottom">
+                        <field name="nom_contact"/>
+                        <field name="telephone_contact"/>
+                        <field name="email_contact" widget="email"/>
+                        <field name="notes_contact"/>
+                    </tree>
+                </field>
+			 </page>
+        </xpath>
+            <notebook position="inside">
+             <page string="CIN / Passeport" attrs="{'invisible': [('company_type', '=', 'company')]}">
+             <group>
+                 <field name="type_piece_identite"/>
+                 <field name="num_piece_identite"/>
+             </group>
+             </page>
+            </notebook>
+      </field>
+
+
+    </record>
+
+        <!-- Locataires tree view -->
+
+    <record id="locataire_custom_tree_fields" model="ir.ui.view">
+      <field name="name">locataire.tree.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='display_name']" position="before">
+          <field name="company_type" string="Type"/>
+        </xpath>
+        <xpath expr="//field[@name='email']" position="replace">
+          <field name="email" string="E-mail"/>
+        </xpath>
+        <xpath expr="//field[@name='display_name']" position="replace">
+          <field name="display_name" string="Nom"/>
+        </xpath>
+      </field>
+    </record>
+
+
+       <!-- Locataires search view -->
+           <record id="locataire_client_custom_search_fields" model="ir.ui.view">
+      <field name="name">locataire.search.inherited</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='customer']" position="replace">
+                     <filter string="Locataire" name="customer" domain="[('active_potenctiel','=',False), ('customer','=',True), ('parent_id', '=', False)]"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="locataire_list_action">
+            <field name="name">Locataires</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+              <field name="domain">[('active_potenctiel','=',False), ('customer','=',True), ('parent_id', '=', False)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Créer un nouveau Locataire
+                </p>
+            </field>
+        </record>
+
+        <!-- Contact form view
+
+        <record model="ir.ui.view" id="contact_form_view">
+            <field name="name">contact.form</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <form string="Contact Form">
+                    <sheet>
+					<group>
+                        <group>
+                            <field name="nom_contact"/>
+                            <field name="telephone_contact"/>
+                            <field name="email_contact"/>
+                            <field name="notes_contact"/>
+                        </group>
+					</group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="contact_list_action">
+            <field name="name">Contact</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record> -->
+
+
+        <menuitem id="locataire_menu" name="LOCATAIRES"
+                  parent="rental_app_menu" sequence="4"/>
+
+        <menuitem id="locataire_locataire_menu" name="Locataires"
+                  parent="locataire_menu"
+                  action="locataire_list_action"/>
+
+
+
+  </data>
+</odoo>

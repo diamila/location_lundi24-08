@@ -1,0 +1,46 @@
+
+<odoo>
+  <data>
+
+    <!--Create a Wizard and Call it in Button Click Odoo-->
+    <!--  https://www.youtube.com/watch?v=K60oF3-vaxA&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=36  -->
+    <!--How To Call Wizard From Menu Item Odoo-->
+    <!--  https://www.youtube.com/watch?v=qpkVKy9JzEw&list=PLqRRLx0cl0hoJhjFWkFYowveq2Zn55dhM&index=37 -->
+<!--
+
+
+      -->
+
+    <record id="create_contrat_form" model="ir.ui.view">
+         <field name="name">create.contrat.wizard</field>
+         <field name="model">create.contrat</field>
+         <field name="arch" type="xml">
+           <form string="Create Contrat">
+               <group>
+                    <field name="locataires"/>
+                    <field name="date_debut"/>
+                   <field name="date_expiration"/>
+                </group>
+                <footer>
+                    <button name="create_contrat" string="Create" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+     </record>
+
+    <record id="open_create_contrat" model="ir.actions.act_window">
+        <field name="name">Create COntrat</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">create.contrat</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="create_contrat_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>
